@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
+const baseURL = 'https://edusuite.store/';
 const adminUrl = 'import.meta.env.VITE_ADMINBASEURL'
 
 // Axios instance for regular user
