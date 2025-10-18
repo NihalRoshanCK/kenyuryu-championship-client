@@ -1,6 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-const baseURL = 'https://takeshicup.online/';
 const adminUrl = 'import.meta.env.VITE_ADMINBASEURL'
 
 // Axios instance for regular user
