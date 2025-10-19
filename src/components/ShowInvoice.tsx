@@ -95,7 +95,7 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                 >
                   <div className="bg-boxdark   backdrop-blur-md bg-opacity-90 border border-opacity-10  shadow-lg rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 border-strokedark">
                     <div className="text-center flex p-5 bg-gradient-to-r from-red-500 to-black text-white text-2xl font-bold uppercase">
-                      <p>CHIKUBUKAI NARIONAL OPEN KARATE CHAMPIONSHIP 2025</p>
+                      <p>2ND ISKA NATIONAL INVITATIDNAL KARATE CHAMMPIOSHIP 2025</p>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
                       <div className="flex items-center"></div>
