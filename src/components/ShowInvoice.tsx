@@ -153,7 +153,7 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Kumite_and_Kata_candidates_count || 0}
                           </td>
-                          <td className="py-2 px-2 sm:px-4">1500.00</td>
+                          <td className="py-2 px-2 sm:px-4">1750.00</td>
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Total_Kata_Kumite_entry_fee || 0}.00
                           </td>
