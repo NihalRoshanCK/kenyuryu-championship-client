@@ -95,7 +95,7 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                 >
                   <div className="bg-boxdark   backdrop-blur-md bg-opacity-90 border border-opacity-10  shadow-lg rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 border-strokedark">
                     <div className="text-center flex p-5 bg-gradient-to-r from-red-500 to-black text-white text-2xl font-bold uppercase">
-                      <p>2ND ISKA NATIONAL INVITATIONAL KARATE CHAMPIONSHIP 2025</p>
+                      <p>KERALA STATE KENYU RYU KARATE CHAMPIONSHIP </p>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
                       <div className="flex items-center"></div>
@@ -153,7 +153,7 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Kumite_and_Kata_candidates_count || 0}
                           </td>
-                          <td className="py-2 px-2 sm:px-4">1750.00</td>
+                          <td className="py-2 px-2 sm:px-4">1500.00</td>
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Total_Kata_Kumite_entry_fee || 0}.00
                           </td>

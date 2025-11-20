@@ -228,7 +228,7 @@ const AdminDashBoard = () => {
           <div ref={componentPDf} className='admindashboard-table'>
             <div className="text-center justify-center flex p-5 bg-gradient-to-r from-red-500 to-black text-white text-2xl font-bold uppercase">
               <p className="admindashboard-table-criteria">
-              2ND ISKA NATIONAL INVITATIONAL KARATE CHAMPIONSHIP 2025
+              KERALA STATE KENYU RYU KARATE CHAMPIONSHIP
               </p>
             </div>
             
