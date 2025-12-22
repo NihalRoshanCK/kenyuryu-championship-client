@@ -69,7 +69,7 @@ console.log(user.user.id);
             <div ref={componentPDf} className="admindashboard-table">
               <div className="text-center justify-center flex p-5 bg-gradient-to-r from-red-500 to-black text-white text-2xl font-bold uppercase">
                 <p className="admindashboard-table-criteria">
-                  KERALA STATE KENYU RYU KARATE CHAMPIONSHIP
+                  SANKUKAI CUP SEASON 2 
                 </p>
               </div>
 
