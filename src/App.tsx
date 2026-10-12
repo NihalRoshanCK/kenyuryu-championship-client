@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect, useState } from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 
 import ECommerce from './pages/Dashboard/ECommerce';
@@ -13,7 +13,6 @@ import ClubDetails from './pages/Dashboard/ClubDetails';
 import AllregistrationsPage from './pages/Dashboard/Allregistration';
 import ProtectedRoute from './pages/Authentication/ProtectedRoute';
 import AdminProtectedRoute from './pages/Authentication/AdminProtectedRoute';
-import AdminSignIn from './pages/Authentication/AdminSignin';
 import AllCandidateDetails from './components/AllCandidateDetails';
 
 const DefaultLayout = lazy(() => import('./layout/DefaultLayout'));
@@ -37,7 +36,7 @@ function App() {
       <Routes>
         <Route path="/auth/signin" element={<SignIn />} />
         <Route path="/auth/signup" element={<SignUp />} />
-        <Route path="/auth/admin/signin" element={<AdminSignIn/>} />
+        <Route path="/auth/admin/signin" element={<Navigate to="/auth/signin" replace />} />
 
         <Route path="/check" element={<AdminProtectedRoute><PrintInvoice /></AdminProtectedRoute>} />
 

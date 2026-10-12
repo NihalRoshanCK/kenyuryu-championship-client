@@ -11,13 +11,15 @@ const SignIn = () => {
   const navigate=useNavigate()
   const [invalidPassword, setinvalidPassword] = useState(false)
   let userDetails = localStorage.getItem("user");
-  
-  
+  let adminDetails = localStorage.getItem("admin");
+
   useEffect(() => {
     if (typeof setColorMode === 'function') {
       setColorMode('dark');
     }
-    if (userDetails) {
+    if (adminDetails && JSON.parse(adminDetails)?.access) {
+      navigate('/');
+    } else if (userDetails) {
       const user = JSON.parse(userDetails)?.access || false;
       user?navigate('/home'):console.log('please Login');
       
@@ -38,14 +40,23 @@ const SignIn = () => {
       );
   
       if (data) {
-        localStorage.setItem('user', JSON.stringify(data));
-        navigate('/home')
+        // One login for everyone: staff go to the admin dashboard, clubs to their home
+        if (data.user?.is_staff) {
+          localStorage.removeItem('user');
+          localStorage.setItem('admin', JSON.stringify(data));
+          navigate('/')
+        } else {
+          localStorage.removeItem('admin');
+          localStorage.setItem('user', JSON.stringify(data));
+          navigate('/home')
+        }
       } else {
         setinvalidPassword(true)
       }
     } catch (error:any) {
       console.error('Error submitting form:', error);
-      if(error?.response.status==401){
+      const status = error?.response?.status;
+      if(status==401||status==404){
         
         setinvalidPassword(true)
       }

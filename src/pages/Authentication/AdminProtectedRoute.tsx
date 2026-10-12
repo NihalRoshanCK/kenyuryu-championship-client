@@ -9,12 +9,13 @@ function AdminProtectedRoute({ children }: ProtectedRouteProps): JSX.Element {
   let adminDetails = localStorage.getItem("admin");
   
   if (adminDetails) {
-    const admin = JSON.parse(adminDetails)?.access || false;
-    return admin ? <>{children}</> : <Navigate to="/auth/admin/signin" />;
+    const details = JSON.parse(adminDetails);
+    const admin = (details?.access && details?.user?.is_staff) || false;
+    return admin ? <>{children}</> : <Navigate to="/auth/signin" />;
   } 
   
   // return  <>{children}</>
-  return <Navigate to="/auth/admin/signin" />;
+  return <Navigate to="/auth/signin" />;
 }
 
 export default AdminProtectedRoute;
