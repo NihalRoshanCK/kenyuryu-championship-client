@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../../context/SiteSettings';
 import { Link, useNavigate } from 'react-router-dom';
 
 import { useEffect, useState } from 'react';
@@ -5,6 +6,7 @@ import useColorMode from '../../hooks/useColorMode';
 import { axiosInstanceNoToken } from '../../axios/config';
 
 const SignIn = () => {
+  const { loginImage } = useSiteSettings();
   const [colorMode, setColorMode] = useColorMode();
   const navigate=useNavigate()
   const [invalidPassword, setinvalidPassword] = useState(false)
@@ -57,7 +59,7 @@ const SignIn = () => {
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="flex justify-center items-center  ">
               <img
-                src="\static\images\TAKESH-removebg-preview.png"
+                src={loginImage}
                 alt=""
               />
             </div>

@@ -1,11 +1,13 @@
+import { useSiteSettings } from '../../context/SiteSettings';
 import React from 'react';
 
 export function PrintInvoice() {
+  const { logo } = useSiteSettings();
   const handlePrint = () => {
     window.print();
   };
   const containerStyle = {
-    backgroundImage: 'url(/static/images/new_logo_karate___2_-removebg-preview.png)',
+    backgroundImage: `url("${logo}")`,
     backgroundSize: 'contain', // Adjust this based on your preference
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -18,7 +20,7 @@ export function PrintInvoice() {
         <div  className="bg-boxdark  backdrop-blur-md bg-opacity-90 border border-opacity-10  shadow-lg rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 border-strokedark">
           <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
             <div className="flex items-center">
-              <img src="/static/images/new_logo_karate___2_-removebg-preview.png" alt="Logo" className="h-8 sm:h-12 mr-2" />
+              <img src={logo} alt="Logo" className="h-8 sm:h-12 mr-2" />
               <div className="text-lg sm:text-xl font-bold text-white">Invoice</div>
             </div>
             <div className="text-sm text-white mt-2 sm:mt-0">

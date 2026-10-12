@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../context/SiteSettings';
 import React, { useEffect, useRef, useState } from 'react';
 import {
   Button,
@@ -38,6 +39,7 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
   name,
   clubName,
 }) => {
+  const { championshipName, logo } = useSiteSettings();
   const [invoice, setInvoice] = useState<InvoiceType>();
   useEffect(() => {
     getInvoice();
@@ -63,7 +65,7 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
   const componentPDf = useRef<HTMLDivElement | null>(null);
   const containerStyle = {
     backgroundImage:
-      'url(/static/images/new_logo_karate___2_-removebg-preview.png)',
+      `url("${logo}")`,
     backgroundSize: 'contain', // Adjust this based on your preference
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -95,7 +97,7 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                 >
                   <div className="bg-boxdark   backdrop-blur-md bg-opacity-90 border border-opacity-10  shadow-lg rounded-lg p-4 sm:p-6 md:p-8 lg:p-10 border-strokedark">
                     <div className="text-center flex p-5 bg-gradient-to-r from-red-500 to-black text-white text-2xl font-bold uppercase">
-                      <p>CHIKUBUKAI NARIONAL OPEN KARATE CHAMPIONSHIP 2025</p>
+                      <p>{championshipName}</p>
                     </div>
                     <div className="flex flex-col sm:flex-row justify-between items-center mb-4 sm:mb-6">
                       <div className="flex items-center"></div>

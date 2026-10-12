@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../context/SiteSettings';
 import { Link } from 'react-router-dom';
 import Logo from '../images/logo/logo-icon.svg';
 import DarkModeSwitcher from './DarkModeSwitcher';
@@ -9,6 +10,7 @@ const Header = (props: {
   sidebarOpen: string | boolean | undefined;
   setSidebarOpen: (arg0: boolean) => void;
 }) => {
+  const { logo } = useSiteSettings();
   return (
     <header className="sticky top-0 z-999 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       <div className="flex flex-grow items-center justify-between py-4 px-4 shadow-2 md:px-6 2xl:px-11">
@@ -57,7 +59,7 @@ const Header = (props: {
           {/* <!-- Hamburger Toggle BTN --> */}
 
           <Link className="block flex-shrink-0 lg:hidden" to="/">
-            <img src='/static/images/new_logo_karate___2_-removebg-preview.png' className='h-15 w-15' alt="Logo" />
+            <img src={logo} className='h-15 w-15' alt="Logo" />
           </Link>
         </div>
 

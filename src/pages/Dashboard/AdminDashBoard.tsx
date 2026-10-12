@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../../context/SiteSettings.tsx';
 import { useRef, useState } from 'react';
 import CheckboxTwo from '../../components/CheckboxTwo.tsx';
 import { FaDownload, FaSearch } from 'react-icons/fa';
@@ -6,6 +7,7 @@ import { useReactToPrint } from 'react-to-print';
 import '../../components/PrintableComponent.css';
 
 const AdminDashBoard = () => {
+  const { championshipName } = useSiteSettings();
   const [kata, setkata] = useState(false);
   const [Kumite, setkumita] = useState(false);
   const [fetch,setFetch]=useState(true);
@@ -228,7 +230,7 @@ const AdminDashBoard = () => {
           <div ref={componentPDf} className='admindashboard-table'>
             <div className="text-center justify-center flex p-5 bg-gradient-to-r from-red-500 to-black text-white text-2xl font-bold uppercase">
               <p className="admindashboard-table-criteria">
-              CHIKUBUKAI NARIONAL OPEN KARATE CHAMPIONSHIP 2025
+              {championshipName}
               </p>
             </div>
             

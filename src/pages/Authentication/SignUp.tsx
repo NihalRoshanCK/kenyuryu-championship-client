@@ -1,3 +1,4 @@
+import { useSiteSettings } from '../../context/SiteSettings';
 import { Link, useNavigate } from 'react-router-dom';
 import { SetStateAction, useEffect, useState } from 'react';
 import useColorMode from '../../hooks/useColorMode';
@@ -13,6 +14,7 @@ interface FormData {
 }
 
 const SignUp = () => {
+  const { loginImage } = useSiteSettings();
   let navigate = useNavigate()
   let userDetails = localStorage.getItem("user");
   const [colorMode, setColorMode] = useColorMode();
@@ -140,7 +142,7 @@ const SignUp = () => {
           <div className="hidden w-full xl:block xl:w-1/2">
             <div className="flex justify-center items-center">
               <img
-                src="\static\images\TAKESH-removebg-preview.png"
+                src={loginImage}
                 alt=""
                 className="max-w-full"
               />
