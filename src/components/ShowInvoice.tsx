@@ -11,6 +11,7 @@ import { useReactToPrint } from 'react-to-print';
 import './PrintableComponent.css';
 import { adminaxios } from '../axios/config';
 import toast from 'react-hot-toast';
+import { basePrice, useChampionshipConfig } from '../context/ChampionshipConfig';
 
 interface YourComponentProps {
   size: any | string | undefined; // Adjust the type for size
@@ -41,6 +42,14 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
 }) => {
   const { championshipName, logo } = useSiteSettings();
   const [invoice, setInvoice] = useState<InvoiceType>();
+  const config = useChampionshipConfig();
+  // The standard price, or "Varies" when some players pay a belt/age specific price
+  const unitPrice = (events: string, players?: number, amount?: number | null) => {
+    const price = basePrice(config, events);
+    if (price === undefined) return '-';
+    if (players && (amount || 0) !== price * players) return 'Varies';
+    return `${price}.00`;
+  };
   useEffect(() => {
     getInvoice();
   }, [id]);
@@ -135,7 +144,9 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Kata_only_candidates_count || 0}
                           </td>
-                          <td className="py-2 px-2 sm:px-4">1000.00</td>
+                          <td className="py-2 px-2 sm:px-4">
+                            {unitPrice('kata', invoice?.Kata_only_candidates_count, invoice?.Total_kata_only_entry_fee)}
+                          </td>
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Total_kata_only_entry_fee || 0}.00
                           </td>
@@ -145,7 +156,9 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Kumite_only_candidates_count || 0}
                           </td>
-                          <td className="py-2 px-2 sm:px-4">1000.00</td>
+                          <td className="py-2 px-2 sm:px-4">
+                            {unitPrice('kumite', invoice?.Kumite_only_candidates_count, invoice?.Total_kumite_only_entry_fee)}
+                          </td>
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Total_kumite_only_entry_fee || 0}.00
                           </td>
@@ -155,7 +168,9 @@ const InvoiceModal: React.FC<YourComponentProps> = ({
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Kumite_and_Kata_candidates_count || 0}
                           </td>
-                          <td className="py-2 px-2 sm:px-4">1500.00</td>
+                          <td className="py-2 px-2 sm:px-4">
+                            {unitPrice('both', invoice?.Kumite_and_Kata_candidates_count, invoice?.Total_Kata_Kumite_entry_fee)}
+                          </td>
                           <td className="py-2 px-2 sm:px-4">
                             {invoice?.Total_Kata_Kumite_entry_fee || 0}.00
                           </td>

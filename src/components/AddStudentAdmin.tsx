@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import {
   Button,
   Dialog,
@@ -9,6 +9,8 @@ import {
 import CheckboxTwo from './CheckboxTwo';
 import { axiosInstance } from '../axios/config';
 import toast from 'react-hot-toast';
+import { apiErrorMessage, estimateFee, needsColour, useChampionshipConfig } from '../context/ChampionshipConfig';
+import { BeltTypeOptions, ColourOptions, GenderOptions } from './RuleOptions';
 
 interface YourComponentProps {
   size: any | string | undefined; // Adjust the type for size
@@ -24,6 +26,16 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
   const [invalidPassword, setinvalidPassword] = useState(false);
   const [selectedValue, setSelectedValue] = useState<string>('');
   const formRef = useRef<HTMLFormElement | null>(null);
+  const config = useChampionshipConfig();
+  const [fee, setFee] = useState<number | null>(null);
+  const updateFee = () => {
+    const form = formRef.current;
+    if (!form) return;
+    const beltType = (form.elements.namedItem('belt_color') as HTMLSelectElement)?.value;
+    const age = parseInt((form.elements.namedItem('age') as HTMLInputElement)?.value);
+    setFee(estimateFee(config, beltType, age, kata, kumita));
+  };
+  useEffect(updateFee, [kata, kumita, config]);
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -48,7 +60,7 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
       !weight ||
       !belt_color.value ||
       !age.value ||
-      (belt_color.value == "Colour Belt" && !belt.value)
+      (needsColour(config, belt_color.value) && !belt?.value)
     ) {
       alert('please Fill All Input Fields');
     }else if( weight <10){
@@ -70,7 +82,7 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
               age: age.value,
               kata: kata,
               kumite: kumita,
-              colours: belt_color.value == "Colour Belt" ? belt.value : "Black"
+              colours: needsColour(config, belt_color.value) ? belt.value : ''
 
             }, // Use password.value instead of password
           );
@@ -82,6 +94,8 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
         } catch (error: any) {
           console.error('Error submitting form:', error);
           setinvalidPassword(true);
+          toast.error(apiErrorMessage(error));
+          if (buttonRef.current) buttonRef.current.disabled = false;
         }
       }
     }
@@ -111,7 +125,7 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
         <DialogBody>
           <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
             <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
-              <form ref={formRef} onSubmit={handleSubmit}>
+              <form ref={formRef} onSubmit={handleSubmit} onChange={updateFee}>
                 <div className="p-6.5">
                   <div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
@@ -184,8 +198,7 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
                         <option disabled value="">
                           Select Gender
                         </option>
-                        <option value="M">Male</option>
-                        <option value="F">Female</option>
+                        <GenderOptions />
                       </select>
                     </div>
 
@@ -205,8 +218,7 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
                         <option disabled selected value="">
                           Select Belt
                         </option>
-                        <option value="Black Belt">black</option>
-                        <option value="Colour Belt">colour</option>
+                        <BeltTypeOptions />
                       </select>
                     </div>
                     <div className="w-full xl:w-1/2">
@@ -247,7 +259,7 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
                       </>
                     </div>
 
-                  {selectedValue == "Colour Belt" && 
+                  {needsColour(config, selectedValue) && 
                     <div className="w-full xl:w-1/2">
                       <label className="mb-2.5 block text-black dark:text-white">
                         Belt
@@ -260,13 +272,7 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
                         <option disabled selected value="">
                           Select Belt
                         </option>
-                        <option value="White">White</option>
-                        <option value="Yellow">Yellow</option>
-                        <option value="Orange">Orange</option>
-                        <option value="Green">Green</option>
-                        <option value="Blue">Blue</option>
-                        <option value="Purple">Purple</option>
-                        <option value="Brown">Brown</option>
+                        <ColourOptions beltType={selectedValue} />
                       </select>
                     </div>
                   }
@@ -277,6 +283,9 @@ const AddStudentAdmin: React.FC<YourComponentProps> = ({ size,fetchPlayers, allC
           </div>
         </DialogBody>
         <DialogFooter>
+          {fee !== null && (
+            <p className="mr-auto text-black dark:text-white">Entry fee: {fee}</p>
+          )}
           {invalidPassword && (
             <p className="text-red-700 ">You Are Entered invalid Details</p>
           )}

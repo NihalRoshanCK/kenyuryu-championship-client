@@ -5,6 +5,14 @@ import { FaDownload, FaSearch } from 'react-icons/fa';
 import AdminDashTable from '../../components/AdminDashboardTable.tsx';
 import { useReactToPrint } from 'react-to-print';
 import '../../components/PrintableComponent.css';
+import { BeltTypeOptions, GenderOptions } from '../../components/RuleOptions.tsx';
+import {
+  ageCategoryNames,
+  colourGroups,
+  needsColour,
+  useChampionshipConfig,
+  weightCategoryLabels,
+} from '../../context/ChampionshipConfig.tsx';
 
 const AdminDashBoard = () => {
   const { championshipName } = useSiteSettings();
@@ -21,6 +29,7 @@ const AdminDashBoard = () => {
   const [selectedGenderCategory, setSelectedGenderCategory] = useState('');
   const [selectedWeightCategory, setSelectedWeightCategory] = useState('');
   const [selectedBeltCategory, setSelectedBeltCategory] = useState('');
+  const config = useChampionshipConfig();
   const handleSelectBeltChange = () => {
     if (selectBeltRef.current) {
       setSelectedBelt(selectBeltRef.current.value);
@@ -67,8 +76,7 @@ const AdminDashBoard = () => {
                 Select Gender
               </option>
               <option value="">All</option>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
+              <GenderOptions />
             </select>
             <select
               ref={selectBeltRef}
@@ -79,10 +87,9 @@ const AdminDashBoard = () => {
                 Select Belt
               </option>
               <option value="">All</option>
-              <option value="Black Belt">Black</option>
-              <option value="Colour Belt">Colour</option>
+              <BeltTypeOptions />
             </select>
-            {selectedBelt === 'Colour Belt' && 
+            {needsColour(config, selectedBelt) && 
             <select
             onChange={handleBeltCategoryChange}
             ref={beltCategory} className="relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
@@ -90,9 +97,11 @@ const AdminDashBoard = () => {
                 Belt color
               </option>
               <option value="">All</option>
-              <option value={["White", "Yellow" , "Orange"]}>White, Yellow & Orange</option>
-              <option value={["Blue", "Green" , "Purple" ]}>Blue, Green & Purple </option>Brown
-              <option value={["Brown"]}>Brown</option>
+              {colourGroups(config, selectedBelt).map((group) => (
+                <option key={group.value} value={group.value}>
+                  {group.label}
+                </option>
+              ))}
             </select>
                 }
             <select
@@ -104,14 +113,11 @@ const AdminDashBoard = () => {
                 Select Age-Category
               </option>
               <option value="" >All</option>
-              {selectedBelt === 'Colour Belt' && (
-                <option value="Mini Sub Junior">Mini Sub Junior</option>
-              )}
-              <option value="Sub Junior">Sub Junior</option>
-              <option value="Cadet">Cadet</option>
-              <option value="Junior">Junior</option>
-              <option value="Senior Below 21">Senior Below 21</option>
-              <option value="Senior Above 21">Senior Above 21</option>
+              {ageCategoryNames(config, selectedBelt).map((name) => (
+                <option key={name} value={name}>
+                  {name}
+                </option>
+              ))}
             </select>
             <div className="w-full flex justify-center gap-15 rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary">
               <CheckboxTwo
@@ -136,85 +142,11 @@ const AdminDashBoard = () => {
                   Weight Category
                 </option>
 
-                {/* mini sub junior color */}
-                {selectedBelt === 'Colour Belt' &&
-                  selectedAgeCategory === 'Mini Sub Junior' && (
-                    <>
-                      <option value="Kumite -20 Kg">Kumite -20 Kg</option>
-                      <option value="Kumite -25 Kg">Kumite -25 Kg</option>
-                      <option value="Kumite +25 Kg">Kumite +25 Kg</option>
-                    </>
-                  )}
-
-                {/*  sub junior color */}
-
-                {(selectedBelt === 'Colour Belt' ||
-                  selectedBelt === 'Black Belt') &&
-                  selectedAgeCategory === 'Sub Junior' && (
-                    <>
-                      <option value="Kumite -30 Kg">Kumite -30 Kg</option>
-                      <option value="Kumite -35 Kg">Kumite -35 Kg</option>
-                      <option value="Kumite -40 Kg">Kumite -40 Kg</option>
-                      <option value="Kumite -45 Kg">Kumite -45 Kg</option>
-                      <option value="Kumite +45 Kg">Kumite +45 Kg</option>
-                    </>
-                  )}
-
-                {/* Cadet */}
-
-                {(selectedBelt === 'Colour Belt' ||
-                  selectedBelt === 'Black Belt') &&
-                  selectedAgeCategory === 'Cadet' && (
-                    <>
-                      <option value="Kumite -45 Kg">Kumite -45 Kg</option>
-                      <option value="Kumite -50 Kg">Kumite -50 Kg</option>
-                      <option value="Kumite -55 Kg">Kumite -55 Kg</option>
-                      <option value="Kumite -60 Kg">Kumite -60 Kg</option>
-
-                      {selectedBelt === 'Colour Belt' && (
-                        <option value="Kumite +60 Kg">Kumite +60 Kg</option>
-                      )}
-                      {selectedBelt === 'Black Belt' && (
-                        <>
-                          <option value="Kumite -65 Kg">Kumite -65 Kg</option>
-                          <option value="Kumite +65 Kg">Kumite +65 Kg</option>
-                        </>
-                      )}
-                    </>
-                  )}
-
-                {(selectedBelt === 'Colour Belt' ||
-                  selectedBelt === 'Black Belt') &&
-                  selectedAgeCategory === 'Junior' && (
-                    <>
-                      <option value="Kumite -50 Kg">Kumite -50 Kg</option>
-                      <option value="Kumite -55 Kg">Kumite -55 Kg</option>
-                      <option value="Kumite -60 Kg">Kumite -60 Kg</option>
-                      <option value="Kumite -65 Kg">Kumite -65 Kg</option>
-                      <option value="Kumite +65 Kg">Kumite +65 Kg</option>
-                    </>
-                  )}
-
-                {(selectedBelt === 'Colour Belt' ||
-                  selectedBelt === 'Black Belt') &&
-                  (selectedAgeCategory === 'Senior Above 21' ||
-                    selectedAgeCategory === 'Senior Below 21') && (
-                    <>
-                      <option value="Kumite -50 Kg">Kumite -50 Kg</option>
-                      <option value="Kumite -55 Kg">Kumite -55 Kg</option>
-                      <option value="Kumite -60 Kg">Kumite -60 Kg</option>
-                      <option value="Kumite -65 Kg">Kumite -65 Kg</option>
-                      <option value="Kumite -70 Kg">Kumite -70 Kg</option>
-                      <option value="Kumite -75 Kg">Kumite -75 Kg</option>
-                      <option value="Kumite +75 Kg">Kumite +75 Kg</option>
-                    </>
-                  )}
-
-                {/* 
-                
-                
-
-                <option value="">colour</option> */}
+                {weightCategoryLabels(config, selectedBelt, selectedAgeCategory, selectedGenderCategory).map((label) => (
+                  <option key={label} value={label}>
+                    {label}
+                  </option>
+                ))}
               </select>
             )}
             <button 

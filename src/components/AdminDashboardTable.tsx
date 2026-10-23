@@ -37,10 +37,8 @@ const AdminDashTable: React.FC<AdminDashTableProps>  = ({color,belt_color,gender
   }, [fetch]); 
   const fetchData = async () => {
     let params: Partial<Params> = {};
-    if(gender=="Male"){
-      params.gender ='M';
-    }else if(gender=='Female'){
-      params.gender='F';
+    if (gender){
+      params.gender = gender;
     }if (belt_color){
       params.belt_color=belt_color
     }if(kata){

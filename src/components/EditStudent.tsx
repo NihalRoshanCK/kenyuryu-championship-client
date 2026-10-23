@@ -8,6 +8,9 @@ import {
 } from '@material-tailwind/react';
 import CheckboxTwo from './CheckboxTwo';
 import { axiosInstance } from '../axios/config';
+import toast from 'react-hot-toast';
+import { apiErrorMessage, needsColour, useChampionshipConfig } from '../context/ChampionshipConfig';
+import { BeltTypeOptions, ColourOptions, GenderOptions } from './RuleOptions';
 interface User {
   id: number;
   name: string;
@@ -39,6 +42,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
   const [kata, setkata] = useState(false);
   const [kumita, setkumita] = useState(false);
   const formRef = useRef<HTMLFormElement | null>(null);
+  const config = useChampionshipConfig();
   
   
   // Usage in your component
@@ -84,7 +88,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
     const age = form.elements.namedItem('age') as HTMLInputElement;
     if(!kata&&!kumita){
       alert("please Select Atleast one Event")
-    }else if(!gender.value||!name.value||!weight||!belt_color.value||!age.value||(belt_color.value=="Colour Belt"&&!belt.value)){
+    }else if(!gender.value||!name.value||!weight||!belt_color.value||!age.value||(needsColour(config, belt_color.value) && !belt?.value)){
       alert("please Fill All Input Fields")
     }else{
     try {
@@ -99,7 +103,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
           age: age.value,
           kata: kata,
           kumite: kumita,
-          colours:belt_color.value=="Colour Belt"?belt.value:"Black"
+          colours: needsColour(config, belt_color.value) ? belt.value : ''
         }, 
       );
 
@@ -108,6 +112,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
       }
     } catch (error: any) {
       console.error('Error submitting form:', error);
+      toast.error(apiErrorMessage(error));
     }}
   };
 
@@ -192,8 +197,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
                       <option disabled value="">
                         Select Gender
                       </option>
-                      <option value="M">Male</option>
-                      <option value="F">Female</option>
+                      <GenderOptions />
                     </select>
                   </div>
 
@@ -212,8 +216,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
                       <option disabled selected value="">
                         Select Belt
                       </option>
-                      <option value="Black Belt">black</option>
-                      <option value="Colour Belt">colour</option>
+                      <BeltTypeOptions />
                     </select>
                   </div>
                 </div>
@@ -256,7 +259,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
                     </>
                   </div>
                 </div>
-               {user?.belt_color=="Colour Belt"&&<div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
+               {needsColour(config, user?.belt_color)&&<div className="mb-4.5 flex flex-col gap-6 xl:flex-row">
                     <div className="w-full xl:w-1/2">
                       <label className="mb-2.5 block text-black dark:text-white">
                         Belt 
@@ -271,13 +274,7 @@ const EditStudent: React.FC<YourComponentProps> = ({
                         <option disabled selected value="">
                           Select Belt
                         </option>
-                        <option value="White">White</option>
-                        <option value="Yellow">Yellow</option>
-                        <option value="Orange">Orange</option>
-                        <option value="Green">Green</option>
-                        <option value="Blue">Blue</option>
-                        <option value="Purple">Purple</option>
-                        <option value="Brown">Brown</option>
+                        <ColourOptions beltType={user?.belt_color} />
                       </select>
                     </div>
                   </div>}
